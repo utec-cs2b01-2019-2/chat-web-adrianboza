@@ -227,10 +227,10 @@ def authenticate():
     username = request.form('username')
     username = request.form('password')
     if username == 'adrian' and password == 'qwerty':
-        session['usuario']= username;
+        session['usuario']= username:
         return "welcome" + username:
     else:
-        return "Sorry"+username"you are not a valid user"
+        return "Sorry"+username+"you are not a valid user"
 
 if __name__ == '__main__':
     app.secret_key = ".."
