@@ -209,6 +209,28 @@ def current_user():
 def logout():
     session.clear()
     return render_template('login.html')
+@app.route('/cuantasletras/<nombre>')
+def cuantasletras(nombre):
+    return str(len(nombre))
+
+@app.route('/suma/<numero>')
+def suma(numero):
+    if 'suma' not in session:
+        session('suma') = 0
+    suma = session('suma')
+    suma = suma + int(numero)
+    session(suma) = suma
+    return str(suma)
+
+@app.route('/authenticate', methods=['POST']
+def authenticate():
+    username = request.form('username')
+    username = request.form('password')
+    if username == 'adrian' and password == 'qwerty':
+        session['usuario']= username;
+        return "welcome" + username:
+    else:
+        return "Sorry"+username"you are not a valid user"
 
 if __name__ == '__main__':
     app.secret_key = ".."
