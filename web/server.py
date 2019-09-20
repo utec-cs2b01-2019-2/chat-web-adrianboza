@@ -176,16 +176,40 @@ def send_message():
     session.commit()
     return 'Message sent'
 
-@app.route('/authenticate', methods=['POST'])
+#@app.route('/authenticate', methods=['POST'])
+#def authenticate():
+#    username = request.form['username']
+#    password = request.form['password']
+#    
+#    if username == 'adrian' and password == '123':
+#        session['usuario']= username
+#        #return "welcome " + username
+#        return render_template('chat.html')
+#    else:
+#       return "Sorry " +username+ "you are not a valid user"
+
+@app.route("/usuarios", methods = ["GET"])
+def todos_los_usuarios():
+    db_session=db.getSession(engine)
+    users= db_session.query(entities.User);
+    response = "";
+    for user in users:
+        response+= user.username+"-"+user.password+";"
+    return response;
+
+@app.route("/authenticate", methods = ["POST"])
 def authenticate():
-    username = request.form['username']
-    password = request.form['password']
-    if username == 'adrian' and password == '123':
-        session['usuario']= username
-        #return "welcome " + username
+    username = request.form["username"]
+    password = request.form["password"]
+    db_session = db.getSession(engine)
+    user = db_session.query(entities.User).filter(entities.User.username == username).filter( entities.User.password ==password).first()
+    if user != None:
+        session ["usuario"] = username
         return render_template('chat.html')
     else:
-        return "Sorry " +username+ "you are not a valid user"
+        return "Sorry " +username+ " you are not a valid user"
+
+
 
 @app.route('/current', methods = ['GET'])
 def current_user():
