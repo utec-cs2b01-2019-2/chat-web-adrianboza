@@ -18,7 +18,7 @@ def index():
 def static_content(content):
     return render_template(content)
 
-@app.route('/users', methods = ['POST'])
+'''@app.route('/users', methods = ['POST'])
 def create_user():
     c =  json.loads(request.form['values'])
     user = entities.User(
@@ -30,7 +30,7 @@ def create_user():
     session = db.getSession(engine)
     session.add(user)
     session.commit()
-    return 'Created User'
+    return 'Created User' '''
 
 @app.route('/users/<id>', methods = ['GET'])
 def get_user(id):
@@ -50,21 +50,22 @@ def get_users():
     data = dbResponse[:]
     return Response(json.dumps(data, cls=connector.AlchemyEncoder), mimetype='application/json')
 
-@app.route('/users', methods = ['PUT'])
-def update_user():
+@app.route('/users/<id>', methods = ['PUT'])
+def update_user(id):
     session = db.getSession(engine)
-    id = request.form['key']
+    #id = request.form['key']
     user = session.query(entities.User).filter(entities.User.id == id).first()
-    c = json.loads(request.form['values'])
+    #c = json.loads(request.form['values'])
+    c = json.loads(request.data)
     for key in c.keys():
         setattr(user, key, c[key])
     session.add(user)
     session.commit()
     return 'Updated User'
 
-@app.route('/users', methods = ['DELETE'])
-def delete_user():
-    id = request.form['key']
+@app.route('/users/<id>', methods = ['DELETE'])
+def delete_user(id):
+    #id = request.form['key']
     session = db.getSession(engine)
     user = session.query(entities.User).filter(entities.User.id == id).one()
     session.delete(user)
@@ -176,17 +177,17 @@ def send_message():
     session.commit()
     return 'Message sent'
 
-#@app.route('/authenticate', methods=['POST'])
+'''@app.route('/authenticate', methods=['POST'])
 #def authenticate():
 #    username = request.form['username']
 #    password = request.form['password']
-#    
+#
 #    if username == 'adrian' and password == '123':
 #        session['usuario']= username
 #        #return "welcome " + username
 #        return render_template('chat.html')
 #    else:
-#       return "Sorry " +username+ "you are not a valid user"
+#       return "Sorry " +username+ "you are not a valid user"'''
 
 @app.route("/usuarios", methods = ["GET"])
 def todos_los_usuarios():
@@ -208,6 +209,24 @@ def authenticate():
         return render_template('chat.html')
     else:
         return "Sorry " +username+ " you are not a valid user"
+
+def LstUsuarios():
+    session = db.getSession(engine)
+
+
+@app.route('/users', methods = ['POST'])
+def create_user():
+    c =  json.loads(request.data)
+    user = entities.User(
+        username=c['username'],
+        name=c['name'],
+        fullname=c['fullname'],
+        password=c['password']
+    )
+    session = db.getSession(engine)
+    session.add(user)
+    session.commit()
+    return 'Created User'
 
 
 
