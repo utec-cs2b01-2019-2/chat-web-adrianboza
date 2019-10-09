@@ -18,19 +18,22 @@ def index():
 def static_content(content):
     return render_template(content)
 
-'''@app.route('/users', methods = ['POST'])
+@app.route('/users', methods = ['POST'])
 def create_user():
-    c =  json.loads(request.form['values'])
-    user = entities.User(
-        username=c['username'],
-        name=c['name'],
-        fullname=c['fullname'],
-        password=c['password']
+   username = request.form['username']
+   name = request.form['name']
+   fullname = request.form['fullname']
+   password = request.form['password']
+   user = entities.User(
+        username=username,
+        name=name,
+        fullname=fullname,
+        password=password,
     )
-    session = db.getSession(engine)
-    session.add(user)
-    session.commit()
-    return 'Created User' '''
+   session = db.getSession(engine)
+   session.add(user)
+   session.commit()
+   return 'Created User'
 
 @app.route('/users/<id>', methods = ['GET'])
 def get_user(id):
@@ -50,22 +53,21 @@ def get_users():
     data = dbResponse[:]
     return Response(json.dumps(data, cls=connector.AlchemyEncoder), mimetype='application/json')
 
-@app.route('/users/<id>', methods = ['PUT'])
-def update_user(id):
+@app.route('/users', methods = ['PUT'])
+def update_user():
     session = db.getSession(engine)
-    #id = request.form['key']
+    id = request.form['key']
     user = session.query(entities.User).filter(entities.User.id == id).first()
-    #c = json.loads(request.form['values'])
-    c = json.loads(request.form.data)
+    c = json.loads(request.form['values'])
     for key in c.keys():
         setattr(user, key, c[key])
     session.add(user)
     session.commit()
     return 'Updated User'
 
-@app.route('/users/<id>', methods = ['DELETE'])
-def delete_user(id):
-    #id = request.form['key']
+@app.route('/users', methods = ['DELETE'])
+def delete_user():
+    id = request.form['key']
     session = db.getSession(engine)
     user = session.query(entities.User).filter(entities.User.id == id).one()
     session.delete(user)
@@ -200,13 +202,16 @@ def todos_los_usuarios():
 
 @app.route("/authenticate", methods = ["POST"])
 def authenticate():
-    username = request.form["username"]
-    password = request.form["password"]
+    username = request.form['username']
+    password = request.form['password']
     db_session = db.getSession(engine)
-    user = db_session.query(entities.User).filter(entities.User.username == username).filter( entities.User.password ==password).first()
+    user = db_session.query(entities.User).filter(
+        entities.User.username == username
+    ).filter(
+        entities.User.password == password
+    ).first()
+
     if user != None:
-        db_session["usuario"] = username;
-        db_session['password'] = password;
         return render_template('chat.html')
     else:
         return "Sorry " +username+ " you are not a valid user"
@@ -214,20 +219,6 @@ def authenticate():
 def LstUsuarios():
     session = db.getSession(engine)
 
-
-@app.route('/users', methods = ['POST'])
-def create_user():
-    c =  json.loads(request.data)
-    user = entities.User(
-        username=c['username'],
-        name=c['name'],
-        fullname=c['fullname'],
-        password=c['password']
-    )
-    session = db.getSession(engine)
-    session.add(user)
-    session.commit()
-    return 'Created User'
 
 @app.route('/current', methods = ['GET'])
 def current_user():

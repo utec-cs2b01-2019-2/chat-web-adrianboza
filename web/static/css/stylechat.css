@@ -24,7 +24,7 @@ body{ display: grid; place-items: center;}
     border-radius: 10px 0 0 0; box-shadow: 0 1px 3px -1px rgba(0,0,0,0.75); z-index: 1;
 }
 #search-container input{
-    color:rgb(0, 0, 0) outline: none; font-weight: bold; border-radius: 5px; /*input del search*/
+    color:rgb(0, 0, 0) ;outline: none; font-weight: bold; border-radius: 5px; /*input del search*/
     height: 30px;border:0;padding-left: 20px; font-size: 1.4rem; background:rgba(255, 255, 255, 0.5);
 }
 #seacrh-container input::placeholder{color:#ddd;font-weight: bold; }

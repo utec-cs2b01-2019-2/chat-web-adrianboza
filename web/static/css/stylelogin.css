@@ -4,7 +4,7 @@ body{
     padding: 0;
     background: url(/static/img/fondo.jpg)
 }
-.log-box{
+.log-in{
     position: absolute;
     transform: translate(-50%,-50%);
     padding: 80px 40px;
